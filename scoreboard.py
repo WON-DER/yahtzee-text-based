@@ -43,4 +43,14 @@ class ScoreBoard:
         is called by turn to display when needing to choose a category for scoring"""
         print("You've scored in these categories so far:")
         for k, v in self.scoresTaken.items():
-            print(k.title() + ": " + str(v))
+            if v != None:
+                print(k.title() + ": " + str(v))
+    
+    def display_available_cats(self):
+        """Computes the remaining available categories to select from and 
+        displays them after already scored categories"""
+        print("\nChoose from these remaining categories: ")
+        for k, v in self.scoresTaken.items():
+            if v is None and k not in ["yahtzee bonus", "upper bonus"]:
+                print(k.title())
+        print()

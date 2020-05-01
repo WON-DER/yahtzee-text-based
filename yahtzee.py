@@ -37,7 +37,9 @@ def one_player(game_over, player1):
             print("-------------")
             print()
             print(f"You ended with a score of {player1.board.end_of_game_score()}!")
-            game_over = True
+            enter = input("Thanks for playing!")
+            if enter == "":
+                game_over = True
 
 
 turn_order = 0
@@ -62,7 +64,9 @@ def two_player(game_over, turn_order, player1, player2):
             print(
                 f"Player 1's score is: {player1.board.end_of_game_score()}\nPlayer 2's score is: {player2.board.end_of_game_score()}"
             )
-            game_over = True
+            enter = input("Thanks for playing!")
+            if enter == "":
+                game_over = True
 
         turn_order += 1
         turn_order = turn_order % 2

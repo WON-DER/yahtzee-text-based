@@ -36,7 +36,8 @@ class Score:
         and gives lowercase selection to score filter"""
         print("It's time to score your roll!")
         self.board.display_active_cats()
-        self.selection = input("Which category to score this roll under?\n").lower()
+        self.board.display_available_cats()
+        self.selection = input("For which category would you like to score?\n").lower()
         self.scoreFilter(self.selection)
 
     def scoreFilter(self, selection):

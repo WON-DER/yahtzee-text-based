@@ -31,9 +31,9 @@ class Turn:
                 self.roll_result.append(random.randint(1, 6))
             self.num_rolls -= 1
             if self.num_rolls > 1:
-                print(f"{self.num_rolls} roll left\n")
-            elif self.num_rolls == 1:
                 print(f"{self.num_rolls} rolls left\n")
+            elif self.num_rolls == 1:
+                print(f"{self.num_rolls} roll left\n")
             else:
                 pass
             self.roll_result  # random.shuffle(self.roll_result) when developed further
