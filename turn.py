@@ -1,12 +1,17 @@
 import random
 import os
-from scoring import Score
-from scoreboard import ScoreBoard
+from calculate_score import Scorer
+from scoreboard import ScoreKeeper
 
 
-class Turn:
+def screen_clear():
+    os.system("clear")
+    os.system("cls")
+
+
+class TurnTaker:
     """Class for a functioning turn per instance of player. Expects nothing but takes calls from the player instance 
-    but modifies the dictionary and calls functions from ScoreBoard"""
+    but modifies the dictionary and calls functions from ScoreKeeper"""
 
     def __init__(self):
         """Gives the turn class the number of rolls, dice and turns to start with. 
@@ -19,8 +24,8 @@ class Turn:
         self.chosen_dice = []
         self.kept_count = 0
         self.turn_count = 0
-        self.board = ScoreBoard()
-        self.score = Score(self.roll_result, self.board)
+        self.score_board = ScoreKeeper()
+        self.score = Scorer(self.roll_result, self.score_board)
 
     def roll(self):
         """Initializes a roll for player instances. Prints a list of randomly selected dice and calls the kept dice function after roll.
@@ -41,7 +46,8 @@ class Turn:
             if self.num_rolls > 0:
                 self.roll_reset()
             else:
-                Score(self.roll_result, self.board).scoreRoll()
+                Scorer(self.roll_result, self.score_board).score_time_display()
+                # self.score.score_time_display()
                 self.end_of_turn()
 
     def roll_reset(self):
@@ -49,13 +55,13 @@ class Turn:
         self.chosen_dice = []
         self.kept_count = 0
         try:
-            self.kept_dice()
+            self.ask_kept_dice()
         except (IndexError, ValueError):
             print(
                 """Please enter valid space-separated number (1 2 3 4 5) for each position you'd like to keep\n"""
             )
             print(self.roll_result)
-            self.kept_dice()
+            self.ask_kept_dice()
         self.roll()
 
     def end_of_turn(self):
@@ -66,10 +72,9 @@ class Turn:
         self.kept_count = 0
         self.num_rolls = 3
         self.roll_result = []
-        os.system("clear")
-        os.system("cls")
+        screen_clear()
 
-    def kept_dice(self):
+    def ask_kept_dice(self):
         """Ask the user which dice they would like to keep to reroll. It then grooms the input to append desired dice to chosen dice
         and increments the kept count to let Roll readjust the amount of dice to roll.
         Clears the terminal and prints the kept dice which is now the roll result to add to the next roll"""
@@ -92,6 +97,5 @@ class Turn:
             self.chosen_dice.append(self.roll_result[i - 1])
             self.kept_count += 1
         self.roll_result = self.chosen_dice
-        os.system("clear")
-        os.system("cls")
+        screen_clear()
         print(f"You kept these {self.roll_result}\n")

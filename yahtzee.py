@@ -1,7 +1,7 @@
 import os
-from turn import Turn
-from scoring import Score
-from scoreboard import ScoreBoard
+from turn import TurnTaker
+from calculate_score import Scorer
+from scoreboard import ScoreKeeper
 
 game_over = False
 print("------------------")
@@ -10,24 +10,28 @@ print("------------------")
 print()
 
 
-class player(Turn, Score, ScoreBoard):
-    """Initializes a player instance and gives instance of each other class required to play. Expects turn, Score and ScoreBoard instance."""
+def screen_clear():
+    os.system("clear")
+    os.system("cls")
+
+
+class Player(TurnTaker, Scorer, ScoreKeeper):
+    """Initializes a player instance and gives instance of each other class required to play. Expects TurnTaker Score and ScoreKeeper instance."""
 
     def __init__(self):
-        """Initializes the player class to inherit from the Turn, Score and ScoreBoard classes"""
-        Turn.__init__(self)
-        Score.__init__(self, self.roll_result, self.board)
-        ScoreBoard.__init__(self)
+        """Initializes the player class to inherit from the TurnTaker Score and ScoreKeeper classes"""
+        TurnTaker.__init__(self)
+        Scorer.__init__(self, self.roll_result, self.score_board)
+        ScoreKeeper.__init__(self)
 
 
-player1 = player()
-player2 = player()
+player1 = Player()
+player2 = Player()
 
 
 def one_player(game_over, player1):
     """Starts the game for one player functionality. Expects game_over and a player1 instance"""
-    os.system("clear")
-    os.system("cls")
+    screen_clear()
     while not game_over:
         print(f"Turn #{player1.turn_count + 1}")
         player1.roll()
@@ -36,10 +40,13 @@ def one_player(game_over, player1):
             print("Final Scores!")
             print("-------------")
             print()
-            print(f"You ended with a score of {player1.board.end_of_game_score()}!")
+            print(
+                f"You ended with a score of {player1.score_board.end_of_game_score()}!"
+            )
             enter = input("Thanks for playing!")
             if enter == "":
                 game_over = True
+                exit()
 
 
 turn_order = 0
@@ -47,8 +54,7 @@ turn_order = 0
 
 def two_player(game_over, turn_order, player1, player2):
     """Starts the game for two player functionality. Expects game_over, turn_order and two player instances"""
-    os.system("clear")
-    os.system("cls")
+    screen_clear()
     while not game_over:
         if turn_order == 0:
             print(f"Turn #{player1.turn_count + 1} for Player 1")
@@ -62,12 +68,12 @@ def two_player(game_over, turn_order, player1, player2):
             print("-------------")
             print()
             print(
-                f"Player 1's score is: {player1.board.end_of_game_score()}\nPlayer 2's score is: {player2.board.end_of_game_score()}"
+                f"Player 1's score is: {player1.score_board.end_of_game_score()}\nPlayer 2's score is: {player2.score_board.end_of_game_score()}"
             )
             enter = input("Thanks for playing!")
             if enter == "":
                 game_over = True
-
+                exit()
         turn_order += 1
         turn_order = turn_order % 2
 
